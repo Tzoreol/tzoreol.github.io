@@ -13,7 +13,7 @@ $(document).ready(function() {
 			$("#metar p").html("Requesting METAR...");
 			
 			$.ajax({
-				url: "http://avwx.rest/api/metar/" + icao,
+				url: "https://avwx.rest/api/metar/" + icao,
 				dataType: "json",
 				method: "GET",
 				success: function(data) {
