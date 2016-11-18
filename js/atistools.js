@@ -64,12 +64,12 @@ function validateFields() {
 		isValid = false;
 	}
 	
-	if(qfu.length == 0) {
+	if($("#qfu").val().length == 0) {
 		$("#errors").append("<p>Resquested runway QFU is mandatory</p>");
 		isValid = false;
 	}
 	
-	if(transitionAltitude.length == 0) {
+	if($("#transitionAltitude").val().length == 0) {
 		$("#errors").append("<p>Transition altitude is mandatory</p>");
 		isValid = false;
 	}
