@@ -1,0 +1,121 @@
+body {
+	font-family: Arial;
+}
+
+h1 {
+	font-weight: 400;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #2a4982;
+	text-align: center;
+}
+
+h2 {
+	font-weight: 200;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #2a4982;
+}
+
+input[type="submit"]
+{
+	color: white;
+	background-color: #214982;
+	border: none;
+	padding: .5em;
+}
+input[type="submit"]:hover {
+	background-color: #A0A0A0;
+}
+
+#errors {
+	width: 30%;
+	padding: .25em 1em;
+	background-color: #FFCDD2;
+	color: #B71C1C;
+	margin: auto;
+	margin-bottom: 0;
+	border: 1px solid #B71C1C;
+	border-bottom: none;
+}
+
+#form , #metar, #runwayAnalysis, #transitionLevel{
+	width: 30%;
+	margin: auto;
+	margin-bottom: 1em;
+	border: 1px solid #EEE;
+	color: #BBB;
+	padding: 1em;
+}
+
+#form p {
+	border: 1px solid #BBB;
+}
+
+#form p label {
+	border-right: 1px solid #BBB;
+	display: inline-block;
+	width: 70%;
+	padding: .5em;
+	text-align: right;
+}
+
+#form p input {
+	display: inline-block;
+	width: calc(29% - 2em);
+	height: calc(1em + 5px);
+	border-style: none;
+	padding: .5em;
+	outline: none;
+	text-transform: uppercase;
+}
+
+#form p input:focus {
+	background-color: #F9F9F9;
+}
+
+#runwayAnalysis span {
+	display: inline-block;
+	width: 100%;
+	padding: 1em 0;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	margin-top: .5em;
+}
+
+span.green {
+	background-color: #4CAF50;
+}
+
+span.lightgreen {
+	background-color: #A5D6A7;
+}
+
+span.neutral {
+	background-color: #9E9E9E;
+}
+
+span.red {
+	background-color: #F44336;
+}
+
+span.orange {
+	background-color: #FF9800;
+}
+
+span.darkorange {
+	background-color: #E65100;
+}
+
+/* Small devices */
+@media (max-width: 640px) {
+	#form , #metar, #runwayAnalysis, #transitionLevel {
+		width: 90%;
+	}
+	
+	#form p input {
+	height: auto;
+	width: 15%;
+	}
+}
