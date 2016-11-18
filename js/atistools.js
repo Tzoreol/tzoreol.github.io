@@ -69,6 +69,11 @@ function validateFields() {
 		isValid = false;
 	}
 	
+	if(transitionAltitude.length == 0) {
+		$("#errors").append("<p>Transition altitude is mandatory</p>");
+		isValid = false;
+	}
+	
 	if((qfu < 0) || (qfu >= 360)) {
 		$("#errors").append("<p>Invalid resquested runway QFU range</p>");
 		isValid = false;
