@@ -1,22 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>ATISTools</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="js/atistools.js" />
+    <script src="js/atistools.js"></script>
     
     <link rel="stylesheet" type="text/css" href="css/ivao.css" />
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <h1>ATISTools</h1>
     
+	<div id="errors" style="display:none">
+	</div>
     <div id="form">
         <p>
-            <label>Airport ICAO: </label><input type="text" id="icao" />
+            <label>Airport ICAO: </label><input type="text" id="icao" size="4"/>
         </p>
         <p>
-            <label>Requested Runnway QFU: </label><input type="number" min="0" max="359" step="1" />
+            <label>Requested Runnway QFU</label><input type="number" id="qfu" min="0" max="359" step="1" size="4"/>
         </p>
+		<p>
+			<label>Published preferential</label><input type="radio" name="type" value="preferential" checked>
+			<label>ILS</label><input type="radio" name="type" value="ils">
+			<label>Classic IFR (VOR, NDB, LOC)</label><input type="radio" name="type" value="classicIFR">
+			<label>IFR approach then visual landing</label><input type="radio" name="type" value="ifrThenViusal">
+		</p>
+		<p>
+            <label>Transition Altitude</label><input type="number" id="transitionAltitude" size="4"/>
+        </p>
+		<input type="submit" id="submit" value="OK" />
     </div>
+	
+	<div id="metar" style="display: none">
+		<h2>METAR</h2>
+		<p></p>
+	</div>
+	
+	<div id="runwayAnalysis" style="display: none">
+		<h2>Runway analysis</h2>
+		<p></p>
+	</div>
+	
+	<div id="transitionLevel" style="display: none">
+		<h2>Transition Level</h2>
+		<p></p>
+	</div>
 </body>
 </html>
