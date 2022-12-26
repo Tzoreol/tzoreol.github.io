@@ -1,0 +1,47 @@
+body {
+    background-color: #EEE ;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+table {
+    background-color: white;
+    border-collapse: collapse;
+    margin: 0 auto 1em auto;
+    text-align: center;
+}
+
+thead {
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+th.team {
+    width: 200px;
+}
+
+th.size50 {
+    width: 50px;
+}
+
+th.size75 {
+    width: 75px;
+}
+
+tr.odd {
+    background-color: #FAFAFA;
+}
+
+td {
+    border-bottom: 1px solid #EEE;
+    padding: .3em;
+}
+
+.left {
+    text-align: left;
+    padding-left: 1em;
+}
