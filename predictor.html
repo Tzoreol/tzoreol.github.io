@@ -9,7 +9,24 @@
 
   <link rel="stylesheet" href="css/main.css" />
 
-  <script src="js/compute_standings.js"></script>
+  <!-- Utilities -->
+  <script src="js/utils/comparison.js"></script>
+  <script src="js/utils/draw.js"></script>
+  <script src="js/utils/schedule.js"></script>
+
+  <!-- Classes -->
+  <script src="js/classes/game.class.js"></script>
+  <script src="js/classes/predictor.class.js"></script>
+  <script src="js/classes/record.class.js"></script>
+  <script src="js/classes/standings.class.js"></script>
+  <script src="js/classes/team.class.js"></script>
+
+  <!-- Resources -->
+  <script src="js/resources/schedule.js"></script>
+  <script src="js/resources/scores.js"></script>
+  <script src="js/resources/teams.js"></script>
+
+<!--  <script src="js/compute_standings.js"></script>-->
 
   <!--Google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,6 +69,35 @@
     <option value="TEN">Tennessee Titans</option>
     <option value="WAS">Washington Commanders</option>
   </select>
+
+  <table id="contenders_standing">
+    <thead>
+    <tr>
+      <th rowspan="2" class="left team">Contenders</th>
+      <th colspan="4">League</th>
+      <th colspan="4">Conference</th>
+      <th colspan="4">Division</th>
+      <th rowspan="2">SoV</th>
+      <th rowspan="2">SoS</th>
+    </tr>
+    <tr>
+      <th class="size50">W</th>
+      <th class="size50">L</th>
+      <th class="size50">T</th>
+      <th class="size75">Pct.</th>
+      <th class="size50">W</th>
+      <th class="size50">L</th>
+      <th class="size50">T</th>
+      <th class="size75">Pct.</th>
+      <th class="size50">W</th>
+      <th class="size50">L</th>
+      <th class="size50">T</th>
+      <th class="size75">Pct.</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 
   <script src="js/predictor.js"></script>
 </body>

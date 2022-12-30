@@ -1,10 +1,19 @@
 let teamSelect = document.getElementById("team");
+
 teamSelect.onchange = function() {
-    let selectedTeam = teamSelect.value;
+    let predictor = new Predictor(teamSelect.value);
+    /*let selectedTeam = teamSelect.value;
     let selectedTeam_remaining_games = getRemainingGames(selectedTeam);
     let contenders = getContenders(selectedTeam, selectedTeam_remaining_games.length);
+    let contenders_remaining_games = getContendersRemainingGames(contenders);
 
-    console.log(getContendersRemainingGames(contenders));
+    drawContendersRemainingGames(contenders_remaining_games);
+
+    let to_display_standings = [];
+    contenders.forEach(contender => to_display_standings.push(Object.assign({}, standings[contender])));
+    to_display_standings.sort(sort_teams);
+
+    draw_table(to_display_standings, "contenders_standing");*/
 };
 
 function getRemainingGames(team) {
@@ -19,8 +28,9 @@ function getRemainingGames(team) {
 }
 
 function getContenders(team, remaining_games_count) {
+
     //Compute team maximum  and minimum percentage
-    let team_record = standings[team]["league"];
+    let team_record = Object.assign({}, standings[team]["league"]);
     let max_team_pct = ((team_record["W"] + remaining_games_count) + (0.5 * team_record["T"])) / (team_record["W"] + team_record["L"] + team_record["T"] + remaining_games_count);
     let min_team_pct = ((team_record["W"]) + (0.5 * team_record["T"])) / (team_record["W"] + team_record["L"] + team_record["T"] + remaining_games_count);
 
@@ -33,7 +43,7 @@ function getContenders(team, remaining_games_count) {
     let contenders = []
     Object.keys(standings).forEach(current => {
         if(divisions[team][0] == divisions[current][0]) {
-            let current_record = standings[current]["league"];
+            let current_record = Object.assign({}, standings[current]["league"]);
             let current_remaining_games_count = getRemainingGames(current).length;
             let max_current_pct = ((current_record["W"] + current_remaining_games_count) + (0.5 * current_record["T"])) / (current_record["W"] + current_record["L"] + current_record["T"] + current_remaining_games_count);
             let min_current_pct = ((current_record["W"]) + (0.5 * current_record["T"])) / (current_record["W"] + current_record["L"] + current_record["T"] + current_remaining_games_count);
@@ -66,11 +76,13 @@ function getContenders(team, remaining_games_count) {
 }
 
 function predictiveTieBreaker(below_team, above_team) {
+
     //Copy record, schedule and victories
-    let below_team_record = saveArrayCopy(standings[below_team]);
+    let standings_copy = saveArrayCopy(standings);
+    let below_team_record = standings_copy[below_team];
     let below_team_schedule = saveArrayCopy(schedule[below_team]);
     let below_team_victories = saveArrayCopy(victories[below_team]);
-    let above_team_record = saveArrayCopy(standings[above_team]);
+    let above_team_record = standings_copy[above_team];
     let above_team_schedule = saveArrayCopy(schedule[above_team]);
     //No need to copy above team victory as we'll simulate lose out
 
@@ -222,9 +234,10 @@ function getFutureH2HGames(below_team, above_team, below_team_remaining_games) {
 }
 
 function saveArrayCopy(arrayToCopy) {
-    let json = JSON.stringify(arrayToCopy);
+    let toReturn = [];
 
-    return JSON.parse(json);
+    arrayToCopy.forEach(e => toReturn.push(e));
+    return arrayToCopy;
 }
 
 function common_opponents_tiebeaker(below_team, below_team_schedule, above_team, above_team_schedule) {
@@ -329,4 +342,129 @@ function getContendersRemainingGames(contenders) {
     });
 
     return contenders_remaining_games;
+}
+
+function drawContendersRemainingGames(contenders_remaining_games) {
+    let main_div = document.getElementById("contenders_remaining_games");
+
+    contenders_remaining_games.forEach(game => {
+        let div = document.createElement("div");
+        let div_name = game[1] + "vs" + game[0];
+        div.id = div_name;
+
+        let away_team = document.createElement("label");
+        away_team.htmlFor = div_name + "_" + game[1];
+        away_team.appendChild(document.createTextNode(game[1]));
+
+        let away_checkbox = document.createElement("input");
+        away_checkbox.type = "checkbox";
+        away_checkbox.name= div_name + "_" + game[1];
+        away_checkbox.value = game[1];
+        away_checkbox.id =  div_name + "_" + game[1];
+        away_checkbox.onchange = updateStandings;
+
+        let home_team = document.createElement("label");
+        home_team.htmlFor = div_name + "_" + game[0];
+        home_team.appendChild(document.createTextNode(game[0]));
+
+        let home_checkbox = document.createElement("input");
+        home_checkbox.type = "checkbox";
+        home_checkbox.name= div_name + "_" + game[0];
+        home_checkbox.value = game[0];
+        home_checkbox.id = div_name + "_" + game[0];
+        home_checkbox.onchange = updateStandings;
+
+        div.appendChild(away_team);
+        div.appendChild(away_checkbox);
+        div.appendChild(home_checkbox);
+        div.appendChild(home_team);
+        main_div.appendChild(div);
+    });
+}
+
+function updateStandings() {
+    //Copy standings to allow us to start over
+    let standings_copy = saveArrayCopy(standings);
+
+    console.log(standings);
+    //Get contenders and their remaining games
+    let selectedTeam = teamSelect.value;
+    let selectedTeam_remaining_games = getRemainingGames(selectedTeam);
+    let contenders = getContenders(selectedTeam, selectedTeam_remaining_games.length);
+    let contenders_remaining_games = getContendersRemainingGames(contenders);
+
+    //Loop into all remaining games
+    contenders_remaining_games.forEach(game => {
+
+        //Check if game has been predicted
+        let checkbox_base_name = game[1] + "vs" + game[0];
+        let away_checkbox = document.getElementById(checkbox_base_name + "_" + game[1]);
+        let home_checkbox = document.getElementById(checkbox_base_name + "_" + game[0]);
+
+        if(away_checkbox.checked || home_checkbox.checked) {
+            //Game has been predicted, update standing
+            let game_result = getPredictedGameResult(away_checkbox, home_checkbox);
+            let conference = is_conference(game[0], game);
+            let division = conference && is_division(game[0], game);
+
+            /*switch (game_result) {
+                case -1:
+                    //Away team win
+                    standings_copy[game[0]]["league"]["L"]++;
+                    standings_copy[game[1]]["league"]["W"]++;
+
+                    if(conference) {
+                        standings_copy[game[0]]["conference"]["L"]++;
+                        standings_copy[game[1]]["conference"]["W"]++;
+                    }
+
+                    if(division) {
+                        standings_copy[game[0]]["division"]["L"]++;
+                        standings_copy[game[1]]["division"]["W"]++;
+                    }
+                    break;
+                case 0:
+                    //Tie
+                    standings_copy[game[0]]["league"]["T"]++;
+                    standings_copy[game[1]]["league"]["T"]++;
+
+                    if(conference) {
+                        standings_copy[game[0]]["conference"]["T"]++;
+                        standings_copy[game[1]]["conference"]["T"]++;
+                    }
+
+                    if(division) {
+                        standings_copy[game[0]]["division"]["T"]++;
+                        standings_copy[game[1]]["division"]["T"]++;
+                    }
+                    break;
+                case 1:
+                    //Home team win
+                    standings_copy[game[0]]["league"]["W"]++;
+                    standings_copy[game[1]]["league"]["L"]++;
+
+                    if(conference) {
+                        standings_copy[game[0]]["conference"]["W"]++;
+                        standings_copy[game[1]]["conference"]["L"]++;
+                    }
+
+                    if(division) {
+                        standings_copy[game[0]]["division"]["W"]++;
+                        standings_copy[game[1]]["division"]["L"]++;
+                    }
+                    break;
+            }*/
+        }
+
+        standings_copy.sort(sort_teams);
+        draw_table(standings_copy, "contenders_standing")
+    });
+}
+
+function getPredictedGameResult(awayCheckbox, homeCheckbox) {
+    if(awayCheckbox.checked && homeCheckbox.checked) {
+        return 0
+    }
+
+    return homeCheckbox.checked ? 1 : -1;
 }

@@ -380,74 +380,39 @@ let victories = {
     "WAS": [],
 };
 
-let schedule = {
-    "ARI": [],
-    "ATL": [],
-    "BAL": [],
-    "BUF": [],
-    "CAR": [],
-    "CHI": [],
-    "CIN": [],
-    "CLE": [],
-    "DAL": [],
-    "DEN": [],
-    "DET": [],
-    "GB": [],
-    "HOU": [],
-    "IND": [],
-    "JAC": [],
-    "KC": [],
-    "LV": [],
-    "LAC": [],
-    "LAR": [],
-    "MIA": [],
-    "MIN": [],
-    "NE": [],
-    "NO": [],
-    "NYG": [],
-    "NYJ": [],
-    "PHI": [],
-    "PIT": [],
-    "SF": [],
-    "SEA": [],
-    "TB": [],
-    "TEN": [],
-    "WAS": [],
-};
-
 let divisions = [];
-divisions["ARI"] = ["NFC", "WEST"];
-divisions["ATL"] = ["NFC", "SOUTH"];
-divisions["BAL"] = ["AFC", "NORTH"];
-divisions["BUF"] = ["AFC", "EAST"];
-divisions["CAR"] = ["NFC", "SOUTH"];
-divisions["CHI"] = ["NFC", "NORTH"];
-divisions["CIN"] = ["AFC", "NORTH"];
-divisions["CLE"] = ["AFC", "NORTH"];
-divisions["DAL"] = ["NFC", "EAST"];
-divisions["DEN"] = ["AFC", "WEST"];
-divisions["DET"] = ["NFC", "NORTH"];
-divisions["GB"] = ["NFC", "NORTH"];
-divisions["HOU"] = ["AFC", "SOUTH"];
-divisions["IND"] = ["AFC", "SOUTH"];
-divisions["JAC"] = ["AFC", "SOUTH"];
-divisions["KC"] = ["AFC", "WEST"];
-divisions["LV"] = ["AFC", "WEST"];
-divisions["LAC"] = ["AFC", "WEST"];
-divisions["LAR"] = ["NFC", "WEST"];
-divisions["MIA"] = ["AFC", "EAST"];
-divisions["MIN"] = ["NFC", "NORTH"];
-divisions["NE"] = ["AFC", "EAST"];
-divisions["NO"] = ["NFC", "SOUTH"];
-divisions["NYG"] = ["NFC", "EAST"];
-divisions["NYJ"] = ["AFC", "EAST"];
-divisions["PHI"] = ["NFC", "EAST"];
-divisions["PIT"] = ["AFC", "NORTH"];
-divisions["SF"] = ["NFC", "WEST"];
-divisions["SEA"] = ["NFC", "WEST"];
-divisions["TB"] = ["NFC", "SOUTH"];
-divisions["TEN"] = ["AFC", "SOUTH"];
-divisions["WAS"] = ["NFC", "EAST"];
+divisions["ARI"] =  ["NFC", "WEST"];
+divisions["ATL"] =  ["NFC", "SOUTH"];
+divisions["BAL"] =  ["AFC", "NORTH"];
+divisions["BUF"] =  ["AFC", "EAST"];
+divisions["CAR"] =  ["NFC", "SOUTH"];
+divisions["CHI"] =  ["NFC", "NORTH"];
+divisions["CIN"] =  ["AFC", "NORTH"];
+divisions["CLE"] =  ["AFC", "NORTH"];
+divisions["DAL"] =  ["NFC", "EAST"];
+divisions["DEN"] =  ["AFC", "WEST"];
+divisions["DET"] =  ["NFC", "NORTH"];
+divisions["GB"] =   ["NFC", "NORTH"];
+divisions["HOU"] =  ["AFC", "SOUTH"];
+divisions["IND"] =  ["AFC", "SOUTH"];
+divisions["JAC"] =  ["AFC", "SOUTH"];
+divisions["KC"] =   ["AFC", "WEST"];
+divisions["LV"] =   ["AFC", "WEST"];
+divisions["LAC"] =  ["AFC", "WEST"];
+divisions["LAR"] =  ["NFC", "WEST"];
+divisions["MIA"] =  ["AFC", "EAST"];
+divisions["MIN"] =  ["NFC", "NORTH"];
+divisions["NE"] =   ["AFC", "EAST"];
+divisions["NO"] =   ["NFC", "SOUTH"];
+divisions["NYG"] =  ["NFC", "EAST"];
+divisions["NYJ"] =  ["AFC", "EAST"];
+divisions["PHI"] =  ["NFC", "EAST"];
+divisions["PIT"] =  ["AFC", "NORTH"];
+divisions["SF"] =   ["NFC", "WEST"];
+divisions["SEA"] =  ["NFC", "WEST"];
+divisions["TB"] =   ["NFC", "SOUTH"];
+divisions["TEN"] =  ["AFC", "SOUTH"];
+divisions["WAS"] =  ["NFC", "EAST"];
 
 standings = [];
 games.forEach(game => {
@@ -595,7 +560,7 @@ function sort_teams(a,b) {
 
         //If there is game and record not even
         if(h2h_games.length >= 1 && h2h_a_pct != .5) {
-            return h2h_a_pct > 500 ? -1 : 1;
+            return h2h_a_pct > .5 ? -1 : 1;
         }
 
         if(conference_pct_a == conference_pct_b) {
@@ -694,6 +659,8 @@ function draw_table(teams, div_id) {
     let tbody = document.getElementById(div_id).getElementsByTagName("tbody")[0];
     let index = 0;
 
+    //Clear tbody in case of update
+    tbody.innerHTML = "";
     teams.forEach(team => {
         let tr = document.createElement("tr");
         tr.classList.add((index % 2) == 0 ? "even" : "odd");
