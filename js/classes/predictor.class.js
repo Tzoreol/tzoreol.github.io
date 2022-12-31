@@ -9,6 +9,7 @@ class Predictor {
         this.#contenders = this.getContenders();
         this.getContendersSchedule();
         this.drawContendersStandings();
+        this.drawSchedule();
     }
 
     getSchedule() {
@@ -126,6 +127,87 @@ class Predictor {
             }
         }
 
+        Draw.drawTable(Comparison.sortTable(contendersStandings), "contenders_standing");
+    }
+
+    drawSchedule() {
+        let schedule_div = document.getElementById("schedule");
+
+        this.#schedule.forEach(game => {
+            let game_div = document.createElement("div");
+            let game_div_id = game.getAwayTeam() + "vs" + game.getHomeTeam();
+            game_div.id = game_div_id;
+
+            let away_team = document.createElement("label");
+            away_team.htmlFor = game_div_id + "_" + game.getAwayTeam();
+            away_team.appendChild(document.createTextNode(teams[game.getAwayTeam()].getFullName()));
+
+            let away_checkbox = document.createElement("input");
+            away_checkbox.type = "checkbox";
+            away_checkbox.name = game_div_id + "_" + game.getAwayTeam();
+            away_checkbox.value = game.getAwayTeam();
+            away_checkbox.id = away_checkbox.name;
+            //away_checkbox.onchange = updateStandings(predictor);
+
+            let home_team = document.createElement("label");
+            home_team.htmlFor = game_div_id + "_" + game.getHomeTeam();
+            home_team.appendChild(document.createTextNode(teams[game.getHomeTeam()].getFullName()));
+
+            let home_checkbox = document.createElement("input");
+            home_checkbox.type = "checkbox";
+            home_checkbox.name = game_div_id + "_" + game.getHomeTeam();
+            home_checkbox.value = game.getHomeTeam();
+            home_checkbox.id = home_checkbox.name;
+            //home_checkbox.onchange = this.updateStandings;
+
+            game_div.appendChild(away_team);
+            game_div.appendChild(away_checkbox);
+            game_div.appendChild(home_checkbox);
+            game_div.appendChild(home_team);
+            schedule_div.appendChild(game_div);
+        });
+    }
+
+    updateStandings() {
+        //Build a new standings
+        let to_be_updated_standings = new Standings(true);
+
+        //For each game in schedule, find the corresponding div
+        this.#schedule.forEach(game => {
+            let game_div_id = game.getAwayTeam() + "vs" + game.getHomeTeam();
+
+            //Get the team in standings
+            let away_team = to_be_updated_standings.getTable()[game.getAwayTeam()];
+            let home_team = to_be_updated_standings.getTable()[game.getHomeTeam()];
+
+            //Find both checkboxes
+            let away_team_checkbox = document.getElementById(game_div_id + "_" + game.getAwayTeam());
+            let home_team_checkbox = document.getElementById(game_div_id + "_" + game.getHomeTeam());
+
+            //If both checked, it's a tie;
+            if(away_team_checkbox.checked && home_team_checkbox.checked) {
+                to_be_updated_standings.updateTableFromGameTeamAndOutcome(game, away_team, 0, true);
+                to_be_updated_standings.updateTableFromGameTeamAndOutcome(game, home_team, 0, true);
+            } else if(away_team_checkbox.checked) {
+                to_be_updated_standings.updateTableFromGameTeamAndOutcome(game, away_team, 1, true);
+                to_be_updated_standings.updateTableFromGameTeamAndOutcome(game, home_team, -1, true);
+            } else if(home_team_checkbox.checked) {
+                to_be_updated_standings.updateTableFromGameTeamAndOutcome(game, away_team, -1, true);
+                to_be_updated_standings.updateTableFromGameTeamAndOutcome(game, home_team, 1, true);
+            }
+        });
+
+        //Do nothing of nothing is checked
+
+        //Fill contenders standings with only contenders
+        let contendersStandings = [];
+        for(const [teamCode, team] of Object.entries(to_be_updated_standings.getTable())) {
+            if(this.#contenders.includes(teamCode) || this.#selectedTeam.getCode() === teamCode) {
+                contendersStandings.push(team);
+            }
+        }
+
+        //Draw updated table
         Draw.drawTable(Comparison.sortTable(contendersStandings), "contenders_standing");
     }
 }

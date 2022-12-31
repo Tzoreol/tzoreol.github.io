@@ -244,10 +244,6 @@ class Comparison {
             let team1H2HPct = h2hStandings.getTable()[team1Code].getRecords()["league"].getPercentage();
             let team2H2HPct = h2hStandings.getTable()[team2Code].getRecords()["league"].getPercentage();
 
-            if(((team1.getCode() == "DET") || (team1.getCode() == "SEA")) && ((team2.getCode() == "DET") || (team2.getCode() == "SEA"))) {
-                console.log(team1.getCode() + ": " + team1H2HPct + " | " + team2.getCode() + ": " + team2H2HPct);
-            }
-
             if(team1H2HPct != team2H2HPct) {
                 //If tie is broke, return winner
                 return team1H2HPct > team2H2HPct ? team1 : team2;
@@ -379,9 +375,6 @@ class Comparison {
         //Add records in order
         records.sort().reverse();
 
-        //console.log(perRecord);
-        //console.log(records);
-
         //Now add per record
         for(let i = 0; i < records.length; i++) {
             switch (perRecord[records[i]].length) {
@@ -418,7 +411,6 @@ class Comparison {
             }
         }
 
-        console.log(toReturn);
         return toReturn;
     }
 
